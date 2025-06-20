@@ -1,0 +1,65 @@
+class UndirectedGraph:
+    def __init__(self):
+        self.order = 0
+        self.size = 0
+        self.nodes = {}
+
+    def add_node(self, node):
+        if node not in self.nodes:
+            self.nodes[node] = [(0, 0)]
+            self.order += 1
+
+    def add_edge(self, node1, node2, weight=1):
+        if node1 not in self.nodes:
+            self.add_node(node1)
+        if node2 not in self.nodes:
+            self.add_node(node2)
+
+        i1 = self._edge_exists(node1, node2)
+        i2 = self._edge_exists(node2, node1)
+
+        if i1 == -1:
+            self.nodes[node1].append((node2, weight))
+            self.nodes[node2].append((node1, weight))
+            self.nodes[node1][0] = (self.nodes[node1][0][0], self.nodes[node1][0][1] + 1)
+            self.nodes[node2][0] = (self.nodes[node2][0][0], self.nodes[node2][0][1] + 1)
+            self.size += 1
+        else:
+            new_weight = self.nodes[node1][i1][1] + 1
+            self.nodes[node1][i1] = (node2, new_weight)
+            self.nodes[node2][i2] = (node1, new_weight)
+
+    def _edge_exists(self, source, target):
+        if source not in self.nodes:
+            return -1
+        for i in range(1, len(self.nodes[source])):
+            if self.nodes[source][i][0] == target:
+                return i
+        return -1
+
+    def degree(self, node):
+        return self.nodes[node][0][1]
+
+    def count_connected_components(self):
+        
+        visited = set()
+        component_count = 0
+
+        for node in self.nodes:
+            if node not in visited:
+                self._dfs(node, visited)
+                component_count += 1
+
+        return component_count
+
+    def _dfs(self, start, visited):
+        
+        stack = [start]
+        while stack:
+            current = stack.pop()
+            if current not in visited:
+                visited.add(current)
+                for i in range(1, len(self.nodes[current])):
+                    neighbor = self.nodes[current][i][0]
+                    if neighbor not in visited:
+                        stack.append(neighbor)
