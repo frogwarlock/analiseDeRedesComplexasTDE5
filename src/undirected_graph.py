@@ -39,6 +39,12 @@ class UndirectedGraph:
 
     def degree(self, node):
         return self.nodes[node][0][1]
+    
+    def degree_centrality(self): #item 4
+        scale = 1 / (self.order - 1)
+        
+        return {node:self.degree(node) * scale
+                for node in self.nodes}
 
     def count_connected_components(self):
         

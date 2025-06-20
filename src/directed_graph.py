@@ -42,6 +42,21 @@ class DirectedGraph:
 
     def degree(self, node):
         return self.indegree(node) + self.outdegree(node)
+    
+    def degree_centrality(self, type=0):
+        scale = 1 / (self.order - 1)
+        
+        if type == 1:
+            return {node: self.indegree(node) * scale
+                    for node in self.nodes}
+        
+        if type == 2:
+            return {node: self.outdegree(node) * scale
+                    for node in self.nodes}
+            
+        scale_total =  1 / (2 * (self.order - 1))
+        return {node: self.degree(node) * scale_total
+                for node in self.nodes}
 
     def get_weight(self, source, target):
         index = self._edge_exists(source, target)
