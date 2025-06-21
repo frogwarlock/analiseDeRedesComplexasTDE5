@@ -1,6 +1,7 @@
 import csv
 from directed_graph import DirectedGraph
 from undirected_graph import UndirectedGraph
+import os
 
 def normalize_name(name):
     return name.strip().upper()
@@ -20,7 +21,7 @@ def load_data(path):
 dg = DirectedGraph()
 udg = UndirectedGraph()
 
-dataset = load_data('./dados/netflix_amazon_disney_titles.csv')
+dataset = load_data('../dados/netflix_amazon_disney_titles.csv')
 
 for directors, actors in dataset:
     for director in directors:
@@ -50,7 +51,7 @@ print("Size:", dg.size)
 print("Top 10 diretores mais influentes(direcionado):") #diretores é indg devido as especificações do TDE
 for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]: # o que muda é o [:10] que limita a 10 os resultados
     print(f"{node} - {value:.4f}")
-    save_centrality_to_file(dg_centrality, "./resultados/diretores_centralidade_grafo_direcionado.txt")
+    save_centrality_to_file(dg_centrality, "../resultados/diretores_centralidade_grafo_direcionado.txt")
 
 print()
 print("Undirected Graph:")
@@ -59,7 +60,26 @@ print("Size:", udg.size)
 print("Top 10 diretores/atores mais influentes(nao direcionado):")
 for node, value in sorted(udg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]:
     print(f"{node} - {value:.4f}")
-    save_centrality_to_file(udg_centrality, "./resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
+    save_centrality_to_file(udg_centrality, "../resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
 print()
 
 print("Betweenness de Quentin Tarantino: {:.7f}".format(dg.betweenness("QUENTIN TARANTINO")))
+
+print()
+
+
+def save_mst_to_file(mst_edges, total_cost, filename):
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(f"Custo total da MST: {total_cost}\n")
+        file.write("Arestas:\n")
+        for u, v, w in mst_edges:
+            file.write(f"{u} - {v} (peso {w})\n")
+
+ator = "BOB ODENKIRK"
+mst_edges, mst_cost = udg.mst_from_node(ator)
+
+if mst_edges:
+    save_mst_to_file(mst_edges, mst_cost, "../resultados/mst_bob_odenkirk.txt")
+else:
+    print(f"O vértice {ator} não existe no grafo.")
+
