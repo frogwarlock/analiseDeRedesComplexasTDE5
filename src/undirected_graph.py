@@ -1,3 +1,6 @@
+import heapq
+from collections import defaultdict
+
 class UndirectedGraph:
     def __init__(self):
         self.order = 0
@@ -69,19 +72,54 @@ class UndirectedGraph:
                     neighbor = self.nodes[current][i][0]
                     if neighbor not in visited:
                         stack.append(neighbor)
+    
+    def betweenness(self, u):
+        cb = 0
 
-    def bfs(self, u):
-        visited = set()
-        queue = [u]
+        for s in self.nodes:
+            if s != u:
+                stack = []
+                P = defaultdict(list)
 
-        while queue:
-            node = queue.pop(0)
+                sigma = defaultdict(int)
+                sigma[s] = 1
 
-            if node not in visited:
-                visited.add(node)
+                d = defaultdict(lambda: float('inf'))
+                d[s] = 0
 
-                for neighbor, _ in self.nodes[node][1:]:
-                    if neighbor not in visited:
-                        queue.append(neighbor)
+                heap = [(0, s)]
 
-        return visited
+                while heap:
+                    d_v, v = heapq.heappop(heap)
+
+                    if d[v] >= d_v:
+                        stack.append(v)
+
+                        for w, weight in self.nodes[v][1:]:
+                            new_weight = d[v] + weight
+
+                            if d[w] > new_weight:
+                                d[w] = new_weight
+                                heapq.heappush(heap, (new_weight, w))
+                                sigma[w] = sigma[v]
+                                P[w] = [v]
+                            elif d[w] == new_weight:
+                                sigma[w] += sigma[v]
+                                P[w].append(v)
+
+                delta = defaultdict(float)
+
+                print(stack)
+
+                while stack:
+                    w = stack.pop()
+
+                    for v in P[w]:
+                        if sigma[w] != 0:
+                            coeff = (sigma[v] / sigma[w]) * (1 + delta[w])
+                            delta[v] += coeff
+
+                    if w != s and w == u:
+                        cb += delta[w] / 2
+
+        return cb / ((self.order - 1) * (self.order - 2) / 2)
