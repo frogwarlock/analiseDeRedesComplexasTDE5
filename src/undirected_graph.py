@@ -69,3 +69,19 @@ class UndirectedGraph:
                     neighbor = self.nodes[current][i][0]
                     if neighbor not in visited:
                         stack.append(neighbor)
+
+    def bfs(self, u):
+        visited = set()
+        queue = [u]
+
+        while queue:
+            node = queue.pop(0)
+
+            if node not in visited:
+                visited.add(node)
+
+                for neighbor, _ in self.nodes[node][1:]:
+                    if neighbor not in visited:
+                        queue.append(neighbor)
+
+        return visited
