@@ -1,5 +1,3 @@
-
-
 import csv
 from directed_graph import DirectedGraph
 from undirected_graph import UndirectedGraph
@@ -22,7 +20,7 @@ def load_data(path):
 dg = DirectedGraph()
 udg = UndirectedGraph()
 
-dataset = load_data('../dados/netflix_amazon_disney_titles.csv')
+dataset = load_data('./dados/netflix_amazon_disney_titles.csv')
 
 for directors, actors in dataset:
     for director in directors:
@@ -52,7 +50,7 @@ print("Size:", dg.size)
 print("Top 10 diretores mais influentes(direcionado):") #diretores é indg devido as especificações do TDE
 for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]: # o que muda é o [:10] que limita a 10 os resultados
     print(f"{node} - {value:.4f}")
-    save_centrality_to_file(dg_centrality, "../resultados/diretores_centralidade_grafo_direcionado.txt")
+    save_centrality_to_file(dg_centrality, "./resultados/diretores_centralidade_grafo_direcionado.txt")
 
 print()
 print("Undirected Graph:")
@@ -61,6 +59,7 @@ print("Size:", udg.size)
 print("Top 10 diretores/atores mais influentes(nao direcionado):")
 for node, value in sorted(udg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]:
     print(f"{node} - {value:.4f}")
-    save_centrality_to_file(udg_centrality, "../resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
+    save_centrality_to_file(udg_centrality, "./resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
 print()
 
+print("Betweenness de Quentin Tarantino: {:.7f}".format(dg.betweenness("QUENTIN TARANTINO")))
