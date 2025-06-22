@@ -135,7 +135,18 @@ Quais são os 10 atores/atrizes mais influentes perante a métrica de centralida
 Quais são os 10 atores/atrizes mais influentes perante a métrica de centralidade de proximidade? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-[Inserir texto explicativo]  
-[Inserir tabela e gráfico]
+Mede o quão próximo cada ator está de todos os outros no grafo de colaborações, medindo o número mínimo de elencos em comum necessários para conectar-lo a qualquer colega. 
+
+Rank	Ator	   Proximidade
+1	Ben Kingsley	0.2213398
+2	Willem Dafoe	0.2208615
+3	Alfred Molina	0.2199867
+4	Robert Patrick	0.2192756
+5	Michael Madsen	0.2182952
+6	Helen Mirren	0.2179878
+7	Gerard Butler	0.2174946
+8	James Franco	0.2170819
+9	Bradley Cooper	0.2170004
+10	Nicolas Cage	0.2169805
 
 ---
