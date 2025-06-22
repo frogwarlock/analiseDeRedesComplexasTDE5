@@ -48,6 +48,63 @@ class UndirectedGraph:
         
         return {node:self.degree(node) * scale
                 for node in self.nodes}
+    
+    
+    def _dijkstra(self, source):
+        infinito = float('inf')
+        dist = {}
+        for vertice in self.nodes:
+            dist[vertice] = infinito
+
+        dist[source] = 0
+
+        heap = []
+        heapq.heappush(heap, (0, source))
+
+        while len(heap) > 0:
+            distancia_atual, vertice_atual = heapq.heappop(heap)
+
+            if distancia_atual > dist[vertice_atual]:
+                continue
+
+            for (vizinho, peso_aresta) in self.nodes[vertice_atual][1:]:
+                nova_distancia = distancia_atual + peso_aresta
+
+                if nova_distancia < dist[vizinho]:
+                    dist[vizinho] = nova_distancia
+                    heapq.heappush(heap, (nova_distancia, vizinho))
+
+        return dist
+    
+
+    def closeness(self, u):
+
+        if u not in self.nodes:
+            raise KeyError(f"Vértice {u} não existe")
+
+        distancias = self._dijkstra(u)
+
+        lista_alcancaveis = []
+        for vertice, d in distancias.items():
+            if vertice != u and d < float('inf'):
+                lista_alcancaveis.append(d)
+
+        R = len(lista_alcancaveis)
+        if R == 0:
+            return 0.0
+
+        soma_distancias = 0.0
+        for d in lista_alcancaveis:
+            soma_distancias += d
+
+        if soma_distancias == 0:
+            return 0.0
+
+        fator1 = R / (self.order - 1)
+        fator2 = R / soma_distancias
+        centralidade = fator1 * fator2
+
+        return centralidade
 
     def count_connected_components(self):
         

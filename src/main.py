@@ -39,17 +39,29 @@ def save_centrality_to_file(centrality, filename):
         for node, value in sorted(centrality.items(), key=lambda x: x[1], reverse=True):
             #esse for percorre o dicionário e com base no valor de centralidade,
             #os nós são ordenados em descrescente
-            file.write(f"\n{node} - {value:.4f}")
-            
 
+            file.write(f"\n{node} - {value:.4f}")
+
+qt_score  = dg.closeness("MORGAN FREEMAN")
+bob_score = udg.closeness("LEONARDO DICAPRIO")
+
+print("Closeness:")
+print(f"MORGAN FREEMAN(Directed): {qt_score:.7f}")
+print(f"LEONARDO DICAPRIO(Undirected): {bob_score:.7f}\n")
+os.makedirs("../resultados", exist_ok=True)
+with open("../resultados/closeness.txt", "w", encoding='utf-8') as file:
+    file.write(f"Closeness de MORGAN FREEMAN (Directed): {qt_score:.7f}\n")
+    file.write(f"Closeness de LEONARDO DICAPRIO(Undirected): {bob_score:.7f}\n")
+           
+           
 udg_centrality = udg.degree_centrality()
 dg_centrality = dg.degree_centrality(1) # 1 para indegree, 2 para outdegree, 0 para total degree
 
 print("Directed Graph:")
 print("Order:", dg.order)
 print("Size:", dg.size)
-print("Top 10 diretores mais influentes(direcionado):") #diretores é indg devido as especificações do TDE
-for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]: # o que muda é o [:10] que limita a 10 os resultados
+print("Top 10 diretores mais influentes(direcionado):") 
+for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]:
     print(f"{node} - {value:.4f}")
     save_centrality_to_file(dg_centrality, "../resultados/diretores_centralidade_grafo_direcionado.txt")
 

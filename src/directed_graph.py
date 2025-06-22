@@ -46,6 +46,50 @@ class DirectedGraph:
     def degree(self, node):
         return self.indegree(node) + self.outdegree(node)
     
+    def _dijkstra(self, source):
+        infinito = float('inf')
+        dist = {}
+        for vertice in self.nodes:
+            dist[vertice] = infinito
+
+        dist[source] = 0
+
+        heap = []
+        heapq.heappush(heap, (0, source))
+
+        while len(heap) > 0:
+            distancia_atual, vertice_atual = heapq.heappop(heap)
+
+            if distancia_atual > dist[vertice_atual]:
+                continue
+
+            for (vizinho, peso_aresta) in self.nodes[vertice_atual][1:]:
+                nova_distancia = distancia_atual + peso_aresta
+
+                if nova_distancia < dist[vizinho]:
+                    dist[vizinho] = nova_distancia
+                    heapq.heappush(heap, (nova_distancia, vizinho))
+
+        return dist
+
+    def closeness(self, u):
+        if u not in self.nodes:
+            raise KeyError(f"Vértice {u} não existe")
+
+        dist = self._dijkstra(u)
+
+        reachable = [d for v, d in dist.items() if v != u and d < float('inf')]
+        R = len(reachable)
+        if R == 0:
+            return 0.0
+
+        total_dist = sum(reachable)
+        if total_dist == 0:
+            return 0.0
+
+        return (R / (self.order - 1)) * (R / total_dist)
+
+    
     def degree_centrality(self, type=0):
         scale = 1 / (self.order - 1)
         
