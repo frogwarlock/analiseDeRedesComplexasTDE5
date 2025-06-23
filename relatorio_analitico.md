@@ -141,6 +141,10 @@ Na tabela se mostram os atores que tem maior grau.
 Quais são os 10 atores/atrizes mais influentes perante a métrica de centralidade de intermediação? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
+A execução do algoritmo de Brandes no grafo não-direcionado não seria viável computacionalmente, então nos baseamos nos algoritmos 1 e 2 do artigo apresentado abaixo, com erro (epsilon) igual a 0.15 para gerar, em 21 minutos, os resultados apresentados.
+
+> RIONDATO, Matteo; KORNAROPOULOS, Evgenios M. Fast approximation of betweenness centrality through sampling. Data Mining and Knowledge Discovery, v. 30, n. 2, p. 438–475, 2016.
+
 Nesse caso, pode-se presumir que quanto maior o grau de intermediação, maior a participação desse ator em filmes de diferentes nichos, pois atuam como intermediários entre vários clusters de diferentes nichos de filmes, maximizando a quantidade de caminhos possíveis em que são intermediários.
 
 | Rank| Ator             | $C_{\text{Grau}}^{\text{In}}$ |
