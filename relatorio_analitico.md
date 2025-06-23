@@ -24,8 +24,44 @@ Por meio dos gráficos abaixo gerados com base nos grafos utilizados, é percept
 Quantas componentes conexas (grafo não-direcionado) e fortemente conexas (grafo direcionado) existem? Qual a distribuição de ordem dessas componentes (número de vértices)? O que essa distribuição indica sobre as características do problema?
 
 **Resposta:**  
-[Inserir texto explicativo]  
-[Inserir gráficos ou tabelas com os tamanhos das componentes]
+1. Componentes Conexas (Grafo Não-Direcionado)
+
+O grafo não-direcionado construído a partir da co-participação de atores em produções audiovisuais apresenta um total de 1122 componentes conexas.
+
+A análise da distribuição de tamanhos revela que:
+
+A maior componente contém 38.083 vértices, formando um grande cluster de colaboração.
+
+A imensa maioria das demais componentes são extremamente pequenas, com tamanho igual a 1 ou 2.
+
+Essa distribuição assimétrica é uma característica típica de redes complexas reais, indicando a presença de uma componente gigante que conecta a maior parte dos nós relevantes da rede, enquanto diversos nós permanecem isolados em pequenos subconjuntos.
+
+![Figure_3](/Users/devmain/Desktop/Figure_2.png)
+2. Componentes Fortemente Conexas (Grafo Direcionado)
+
+No grafo direcionado, que modela a relação entre atores e diretores (direcionada do ator para o diretor), foram identificadas 13.055 componentes fortemente conexas (CFCs).
+
+A distribuição é altamente concentrada em tamanhos pequenos:
+
+A maior parte das CFCs é composta por apenas um vértice, indicando a ausência de reciprocidade.
+
+Pouquíssimas componentes têm tamanho maior que 2.
+
+Isso sugere que o grafo é altamente acíclico e hierárquico, o que é esperado em grafos derivados de relações bipartidas (como ator → diretor). A direcionalidade impede a formação de ciclos, tornando raras as conexões de ida e volta.
+
+![Figure_4](/Users/devmain/Desktop/Figure_1.png)
+3. Conclusão
+
+A estrutura das componentes em ambos os grafos reflete propriedades essenciais de redes complexas:
+
+Presença de uma componente gigante altamente conectada.
+
+Muitas componentes pequenas e desconectadas.
+
+Pouca reciprocidade em relações direcionadas.
+
+Essas observações estão alinhadas com a dinâmica de redes de colaboração no contexto de produções audiovisuais, onde poucos profissionais concentram a maioria das conexões, enquanto outros atuam de forma mais isolada.
+
 
 ---
 

@@ -31,16 +31,16 @@ for directors, actors in dataset:
     for i in range(len(actors)):
         for j in range(i + 1, len(actors)):
             udg.add_edge(actors[i], actors[j])
-       
+
 def save_centrality_to_file(centrality, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write("Node - Centrality")
-        
+
         for node, value in sorted(centrality.items(), key=lambda x: x[1], reverse=True):
             #esse for percorre o dicionário e com base no valor de centralidade,
             #os nós são ordenados em descrescente
             file.write(f"\n{node} - {value:.4f}")
-            
+
 
 udg_centrality = udg.degree_centrality()
 dg_centrality = dg.degree_centrality(1) # 1 para indegree, 2 para outdegree, 0 para total degree
@@ -83,3 +83,21 @@ if mst_edges:
 else:
     print(f"O vértice {ator} não existe no grafo.")
 
+
+sccs = dg.kosaraju_scc()
+
+with open("../resultados/componentes_fortemente_conexas.txt", "w", encoding="utf-8") as f:
+    f.write(f"Quantidade de componentes fortemente conexas: {len(sccs)}\n\n")
+    for i, comp in enumerate(sccs, 1):
+        f.write(f"Componente {i}: tamanho = {len(comp)}\n")
+
+components = udg.count_connected_components()
+
+with open("../resultados/componentes_conexas.txt", "w", encoding="utf-8") as f:
+    f.write(f"Quantidade de componentes conexas: {len(components)}\n\n")
+    for i, comp in enumerate(components, 1):
+        f.write(f"Componente {i}: tamanho = {len(comp)}\n")
+
+dg.plot_component_size_distribution()
+
+udg.plot_component_size_distribution()

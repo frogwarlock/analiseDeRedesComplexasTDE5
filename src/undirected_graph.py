@@ -1,5 +1,6 @@
 import heapq
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 class UndirectedGraph:
     def __init__(self):
@@ -42,62 +43,79 @@ class UndirectedGraph:
 
     def degree(self, node):
         return self.nodes[node][0][1]
-    
-    def degree_centrality(self): #item 4
+
+    def degree_centrality(self):
         scale = 1 / (self.order - 1)
-        
-        return {node:self.degree(node) * scale
-                for node in self.nodes}
+        return {node: self.degree(node) * scale for node in self.nodes}
+
+    def degree_distribution(self):
+        return [self.degree(node) for node in self.nodes]
+
+    def plot_degree_distribution(self, title="Distribuição de Grau"):
+        degrees = self.degree_distribution()
+        plt.figure()
+        plt.hist(degrees, bins=50, edgecolor='black')
+        plt.title(title)
+        plt.xlabel("Grau")
+        plt.ylabel("Frequência")
+        plt.yscale("log")
+        plt.grid(True)
+        plt.show()
 
     def count_connected_components(self):
-        
         visited = set()
-        component_count = 0
+        components = []
 
         for node in self.nodes:
             if node not in visited:
-                self._dfs(node, visited)
-                component_count += 1
+                component = []
+                self._dfs(node, visited, component)
+                components.append(component)
 
-        return component_count
+        return components
 
-    def _dfs(self, start, visited):
-        
+    def _dfs(self, start, visited, component):
         stack = [start]
         while stack:
             current = stack.pop()
             if current not in visited:
                 visited.add(current)
+                component.append(current)
                 for i in range(1, len(self.nodes[current])):
                     neighbor = self.nodes[current][i][0]
                     if neighbor not in visited:
                         stack.append(neighbor)
-    
+
+    def plot_component_size_distribution(self):
+        components = self.count_connected_components()
+        sizes = [len(c) for c in components]
+        plt.figure()
+        plt.hist(sizes, bins=50, edgecolor='black')
+        plt.title("Distribuição do Tamanho das Componentes Conexas")
+        plt.xlabel("Tamanho da componente")
+        plt.ylabel("Frequência")
+        plt.yscale("log")
+        plt.grid(True)
+        plt.show()
+
     def betweenness(self, u):
         cb = 0
-
         for s in self.nodes:
             if s != u:
                 stack = []
                 P = defaultdict(list)
-
                 sigma = defaultdict(int)
                 sigma[s] = 1
-
                 d = defaultdict(lambda: float('inf'))
                 d[s] = 0
-
                 heap = [(0, s)]
 
                 while heap:
                     d_v, v = heapq.heappop(heap)
-
                     if d[v] >= d_v:
                         stack.append(v)
-
                         for w, weight in self.nodes[v][1:]:
                             new_weight = d[v] + weight
-
                             if d[w] > new_weight:
                                 d[w] = new_weight
                                 heapq.heappush(heap, (new_weight, w))
@@ -108,17 +126,12 @@ class UndirectedGraph:
                                 P[w].append(v)
 
                 delta = defaultdict(float)
-
-                print(stack)
-
                 while stack:
                     w = stack.pop()
-
                     for v in P[w]:
                         if sigma[w] != 0:
                             coeff = (sigma[v] / sigma[w]) * (1 + delta[w])
                             delta[v] += coeff
-
                     if w != s and w == u:
                         cb += delta[w] / 2
 
@@ -137,7 +150,7 @@ class UndirectedGraph:
         for neighbor, weight in self.nodes[start][1:]:
             heapq.heappush(heap, (weight, start, neighbor))
 
-        while heap: # Usando Prim
+        while heap:
             weight, u, v = heapq.heappop(heap)
             if v not in visited:
                 visited.add(v)
@@ -148,5 +161,3 @@ class UndirectedGraph:
                         heapq.heappush(heap, (w, v, neighbor))
 
         return mst_edges, total_cost
-
-
