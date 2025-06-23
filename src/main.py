@@ -1,4 +1,6 @@
 import csv
+import pandas as pd
+import matplotlib.pyplot as plt
 from directed_graph import DirectedGraph
 from undirected_graph import UndirectedGraph
 import os
@@ -21,7 +23,7 @@ def load_data(path):
 dg = DirectedGraph()
 udg = UndirectedGraph()
 
-dataset = load_data('../dados/netflix_amazon_disney_titles.csv')
+dataset = load_data('./dados/netflix_amazon_disney_titles.csv')
 
 for directors, actors in dataset:
     for director in directors:
@@ -31,16 +33,17 @@ for directors, actors in dataset:
     for i in range(len(actors)):
         for j in range(i + 1, len(actors)):
             udg.add_edge(actors[i], actors[j])
-            
+
 def save_centrality_to_file(centrality, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write("Node - Centrality")
-        
+
         for node, value in sorted(centrality.items(), key=lambda x: x[1], reverse=True):
             #esse for percorre o dicionário e com base no valor de centralidade,
             #os nós são ordenados em descrescente
 
             file.write(f"\n{node} - {value:.4f}")
+
 
 def save_topk(topk_list, filename):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -97,7 +100,7 @@ print("Size:", dg.size)
 print("Top 10 diretores mais influentes(direcionado):") 
 for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]:
     print(f"{node} - {value:.4f}")
-    save_centrality_to_file(dg_centrality, "../resultados/diretores_centralidade_grafo_direcionado.txt")
+    save_centrality_to_file(dg_centrality, "./resultados/diretores_centralidade_grafo_direcionado.txt")
 
 print()
 print("Undirected Graph:")
@@ -106,13 +109,8 @@ print("Size:", udg.size)
 print("Top 10 diretores/atores mais influentes(nao direcionado):")
 for node, value in sorted(udg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]:
     print(f"{node} - {value:.4f}")
-    save_centrality_to_file(udg_centrality, "../resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
+    save_centrality_to_file(udg_centrality, "./resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
 print()
-
-print("Betweenness de Quentin Tarantino: {:.7f}".format(dg.betweenness("QUENTIN TARANTINO")))
-
-print()
-
 
 def save_mst_to_file(mst_edges, total_cost, filename):
     with open(filename, 'w', encoding='utf-8') as file:
@@ -125,7 +123,55 @@ ator = "BOB ODENKIRK"
 mst_edges, mst_cost = udg.mst_from_node(ator)
 
 if mst_edges:
-    save_mst_to_file(mst_edges, mst_cost, "../resultados/mst_bob_odenkirk.txt")
+    save_mst_to_file(mst_edges, mst_cost, "./resultados/mst_bob_odenkirk.txt")
 else:
     print(f"O vértice {ator} não existe no grafo.")
 
+
+plt.hist(dg.degree_distribution(), color="skyblue", edgecolor="black")
+plt.title("Grafo Direcionado")
+plt.xlabel("Graus")
+plt.ylabel("Frequência")
+plt.show()
+
+plt.hist(udg.degree_distribution(), color="skyblue", edgecolor="black")
+plt.title("Grafo Não-Direcionado")
+plt.xlabel("Graus")
+plt.ylabel("Frequência")
+plt.show()
+
+print("Centralidade de intermediação de Bob Odenkirk (direcionado): {:.8f}".format(dg.betweenness("BOB ODENKIRK")))
+
+dg_betweenness_file = open("./resultados/dg_betweenness.txt", "w", encoding="utf-8")
+dg_betweenness_file.write("10 diretores mais influentes perante a métrica de centralidade de intermediação\n\n")
+
+for bc, actor in dg.top_K_betweenness(10):
+    dg_betweenness_file.write("{}: {:.8f}\n".format(actor, bc))
+
+dg_betweenness_file.close()
+
+
+udg_betweenness_file = open("./resultados/udg_betweenness.txt", "w", encoding="utf-8")
+udg_betweenness_file.write("10 atores/atrizes mais influentes perante a métrica de centralidade de intermediação\n\n")
+
+for actor, bc in udg.estimate_top_k_betweenness(10, epsilon=0.15):
+    udg_betweenness_file.write("{}: {:.8f}\n".format(actor, bc))
+
+udg_betweenness_file.close()
+sccs = dg.kosaraju_scc()
+
+with open("../resultados/componentes_fortemente_conexas.txt", "w", encoding="utf-8") as f:
+    f.write(f"Quantidade de componentes fortemente conexas: {len(sccs)}\n\n")
+    for i, comp in enumerate(sccs, 1):
+        f.write(f"Componente {i}: tamanho = {len(comp)}\n")
+
+components = udg.count_connected_components()
+
+with open("../resultados/componentes_conexas.txt", "w", encoding="utf-8") as f:
+    f.write(f"Quantidade de componentes conexas: {len(components)}\n\n")
+    for i, comp in enumerate(components, 1):
+        f.write(f"Componente {i}: tamanho = {len(comp)}\n")
+
+dg.plot_component_size_distribution()
+
+udg.plot_component_size_distribution()

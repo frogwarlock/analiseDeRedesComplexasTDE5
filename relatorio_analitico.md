@@ -8,9 +8,13 @@
 **Pergunta:**  
 Qual é a distribuição de graus de ambos os grafos? Essa distribuição apresenta características típicas de redes complexas?
 
-**Resposta:**  
-[Inserir texto explicativo]  
-[Inserir histogramas e gráficos de distribuição]
+**Resposta:** 
+
+Por meio dos gráficos abaixo gerados com base nos grafos utilizados, é perceptível uma distribuição de graus seguindo uma lei de potência, portanto, pode-se concluir que ambos os grafos representam uma rede complexa
+
+![Figure_1](https://github.com/user-attachments/assets/95ed746b-5ace-407e-97bd-abe2e314ce88)
+![Figure_2](https://github.com/user-attachments/assets/00a51dd5-74e5-4f45-a55d-d52aff7766af)
+
 
 ---
 
@@ -20,8 +24,44 @@ Qual é a distribuição de graus de ambos os grafos? Essa distribuição aprese
 Quantas componentes conexas (grafo não-direcionado) e fortemente conexas (grafo direcionado) existem? Qual a distribuição de ordem dessas componentes (número de vértices)? O que essa distribuição indica sobre as características do problema?
 
 **Resposta:**  
-[Inserir texto explicativo]  
-[Inserir gráficos ou tabelas com os tamanhos das componentes]
+1. Componentes Conexas (Grafo Não-Direcionado)
+
+O grafo não-direcionado construído a partir da co-participação de atores em produções audiovisuais apresenta um total de 1122 componentes conexas.
+
+A análise da distribuição de tamanhos revela que:
+
+A maior componente contém 38.083 vértices, formando um grande cluster de colaboração.
+
+A imensa maioria das demais componentes são extremamente pequenas, com tamanho igual a 1 ou 2.
+
+Essa distribuição assimétrica é uma característica típica de redes complexas reais, indicando a presença de uma componente gigante que conecta a maior parte dos nós relevantes da rede, enquanto diversos nós permanecem isolados em pequenos subconjuntos.
+
+![Figure_3](/Users/devmain/Desktop/Figure_2.png)
+2. Componentes Fortemente Conexas (Grafo Direcionado)
+
+No grafo direcionado, que modela a relação entre atores e diretores (direcionada do ator para o diretor), foram identificadas 13.055 componentes fortemente conexas (CFCs).
+
+A distribuição é altamente concentrada em tamanhos pequenos:
+
+A maior parte das CFCs é composta por apenas um vértice, indicando a ausência de reciprocidade.
+
+Pouquíssimas componentes têm tamanho maior que 2.
+
+Isso sugere que o grafo é altamente acíclico e hierárquico, o que é esperado em grafos derivados de relações bipartidas (como ator → diretor). A direcionalidade impede a formação de ciclos, tornando raras as conexões de ida e volta.
+
+![Figure_4](/Users/devmain/Desktop/Figure_1.png)
+3. Conclusão
+
+A estrutura das componentes em ambos os grafos reflete propriedades essenciais de redes complexas:
+
+Presença de uma componente gigante altamente conectada.
+
+Muitas componentes pequenas e desconectadas.
+
+Pouca reciprocidade em relações direcionadas.
+
+Essas observações estão alinhadas com a dinâmica de redes de colaboração no contexto de produções audiovisuais, onde poucos profissionais concentram a maioria das conexões, enquanto outros atuam de forma mais isolada.
+
 
 ---
 
@@ -67,8 +107,21 @@ Na tabela se mostram os atores que tem maior grau e a imagem é uma representaç
 Quais são os 10 diretores mais influentes perante a métrica de centralidade de intermediação? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-[Inserir texto explicativo]  
-[Inserir tabela e gráfico]
+
+Neste caso, os diretores mais influentes perante a métrica de centralidade de intermediação são os que mais atuaram também como atores, ou que atuaram como atores em filmes com um grande elenco, pois como os diretores são os pontos finais de todos os caminhos do grafo direcionado, as pessoas que atuam apenas como diretores não intermediam nenhum caminho, e quando atuam como intermediário, é porque atuam também como atores. Essa justificativa é perceptível no fato de o maior grau ser atribuído a James Franco, que além de diretor, também é ator, por exemplo, como Harry Osborn em Homem-Aranha (2002)
+ 
+| Rank| Diretor             | $C_{\text{Grau}}^{\text{In}}$ |
+| ---- | ------------------- | ----------------------------- |
+| 1    | JAMES FRANCO     | 0.00000077                        |
+| 2    | JON FAVREAU    | 0.00000063                        |
+| 3    | FRANK OZ         | 0.00000047                        |
+| 4    | MAHESH MANJREKAR    | 0.00000040                        |
+| 5    | ELIZABETH BANKS    | 0.00000039                        |
+| 6    | JIM HENSON         | 0.00000037                        |
+| 7    | SETH ROGEN    | 0.00000036                        |
+| 8    | BRIAN HENSON | 0.00000035                        |
+| 9    | RAJAT KAPOOR           | 0.00000031                        |
+| 10   | GAUTHAM VASUDEV MENON         | 0.00000031                        |
 
 ---
 
@@ -77,9 +130,22 @@ Quais são os 10 diretores mais influentes perante a métrica de centralidade de
 **Pergunta:**  
 Quais são os 10 diretores mais influentes perante a métrica de centralidade de proximidade? O que essa métrica representa nesse contexto?
 
-**Resposta:**  
-[Inserir texto explicativo]  
-[Inserir tabela e gráfico]
+**Resposta:**
+
+Nesse caso mede o quão próximo cada ator está de todos os outros no grafo direcionado de colaborações, baseado no menor elencos em comum necessários para ir de um ator a outro.
+
+| Rank | Ator                | C_Proximidade |
+|------|---------------------|---------------|
+| 1    | JAMES FRANCO        | 0.0011        |
+| 2    | SELENA GOMEZ        | 0.0010        |
+| 3    | SETH ROGEN          | 0.0009        |
+| 4    | VINCENT D'ONOFRIO   | 0.0009        |
+| 5    | SHARON STONE        | 0.0009        |
+| 6    | JACKI WEAVER        | 0.0009        |
+| 7    | JOSH HUTCHERSON     | 0.0008        |
+| 8    | ZAC EFRON           | 0.0008        |
+| 9    | HANNIBAL BURESS     | 0.0008        |
+| 10   | NAT WOLFF           | 0.0008        |
 
 ---
 
@@ -124,8 +190,24 @@ Na tabela se mostram os atores que tem maior grau.
 Quais são os 10 atores/atrizes mais influentes perante a métrica de centralidade de intermediação? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-[Inserir texto explicativo]  
-[Inserir tabela e gráfico]
+A execução do algoritmo de Brandes no grafo não-direcionado não seria viável computacionalmente, então nos baseamos nos algoritmos 1 e 2 do artigo apresentado abaixo, com erro (epsilon) igual a 0.15 para gerar, em 21 minutos, os resultados apresentados.
+
+> RIONDATO, Matteo; KORNAROPOULOS, Evgenios M. Fast approximation of betweenness centrality through sampling. Data Mining and Knowledge Discovery, v. 30, n. 2, p. 438–475, 2016.
+
+Nesse caso, pode-se presumir que quanto maior o grau de intermediação, maior a participação desse ator em filmes de diferentes nichos, pois atuam como intermediários entre vários clusters de diferentes nichos de filmes, maximizando a quantidade de caminhos possíveis em que são intermediários.
+
+| Rank| Ator             | $C_{\text{Grau}}^{\text{In}}$ |
+| ---- | ------------------- | ----------------------------- |
+| 1    | ANUPAM KHER     | 0.05014588                        |
+| 2    | BEN KINGSLEY    | 0.02042305                        |
+| 3    | OM PURI         | 0.01714077                        |
+| 4    | IKO UWAIS    | 0.01039387                        |
+| 5    | PRIYANKA CHOPRA    | 0.01021152                        |
+| 6    | MADHAVAN         | 0.01021152                        |
+| 7    | DANNY GLOVER    | 0.00984683                        |
+| 8    | ALFRED MOLINA | 0.00984683                        |
+| 9    | STEVE BLUM           | 0.00948213                        |
+| 10   | ERNEST BORGNINE         | 0.00911743                        |
 
 ---
 
@@ -135,18 +217,19 @@ Quais são os 10 atores/atrizes mais influentes perante a métrica de centralida
 Quais são os 10 atores/atrizes mais influentes perante a métrica de centralidade de proximidade? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-Mede o quão próximo cada ator está de todos os outros no grafo de colaborações, medindo o número mínimo de elencos em comum necessários para conectar-lo a qualquer colega. 
+Nesse caso mede o quão próximo cada ator está de todos os outros no grafo de colaborações, medindo o número mínimo de elencos em comum necessários para conectar-lo a qualquer colega. 
 
-Rank	Ator	   Proximidade
-1	Ben Kingsley	0.2213398
-2	Willem Dafoe	0.2208615
-3	Alfred Molina	0.2199867
-4	Robert Patrick	0.2192756
-5	Michael Madsen	0.2182952
-6	Helen Mirren	0.2179878
-7	Gerard Butler	0.2174946
-8	James Franco	0.2170819
-9	Bradley Cooper	0.2170004
-10	Nicolas Cage	0.2169805
+| Rank | Ator           | C_Proximidade |
+|------|----------------|---------------|
+| 1    | Ben Kingsley   | 0.2213        |
+| 2    | Willem Dafoe   | 0.2209        |
+| 3    | Alfred Molina  | 0.2200        |
+| 4    | Robert Patrick | 0.2193        |
+| 5    | Michael Madsen | 0.2183        |
+| 6    | Helen Mirren   | 0.2180        |
+| 7    | Gerard Butler  | 0.2175        |
+| 8    | James Franco   | 0.2171        |
+| 9    | Bradley Cooper | 0.2170        |
+| 10   | Nicolas Cage   | 0.2170        |
 
 ---
