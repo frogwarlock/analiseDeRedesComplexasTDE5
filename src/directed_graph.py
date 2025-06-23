@@ -65,6 +65,9 @@ class DirectedGraph:
         index = self._edge_exists(source, target)
         if index != -1:
             return self.nodes[source][index][1]
+        
+    def degree_distribution(self):
+        return [self.nodes[v][0][0] + self.nodes[v][0][1] for v in self.nodes]
     
     def betweenness(self, u):
         cb = 0
@@ -93,9 +96,9 @@ class DirectedGraph:
 
                             if d[w] > new_weight:
                                 d[w] = new_weight
-                                heapq.heappush(heap, (new_weight, w))
                                 sigma[w] = sigma[v]
                                 P[w] = [v]
+                                heapq.heappush(heap, (new_weight, w))
                             elif d[w] == new_weight:
                                 sigma[w] += sigma[v]
                                 P[w].append(v)
@@ -114,3 +117,68 @@ class DirectedGraph:
                         cb += delta[w]
 
         return cb / ((self.order - 1) * (self.order - 2))
+    
+    def top_K_betweenness(self, K):
+        cb = {v: 0.0 for v in self.nodes}
+
+        for s in self.nodes:
+            stack = []
+            P = defaultdict(list)
+
+            sigma = defaultdict(int)
+            sigma[s] = 1
+
+            d = defaultdict(lambda: float('inf'))
+            d[s] = 0
+
+            heap = [(0, s)]
+
+            while heap:
+                d_v, v = heapq.heappop(heap)
+
+                if d[v] >= d_v:
+                    stack.append(v)
+
+                    for w, weight in self.nodes[v][1:]:
+                        new_weight = d[v] + weight
+
+                        if d[w] > new_weight:
+                            d[w] = new_weight
+                            heapq.heappush(heap, (new_weight, w))
+                            sigma[w] = sigma[v]
+                            P[w] = [v]
+                        elif d[w] == new_weight:
+                            sigma[w] += sigma[v]
+                            P[w].append(v)
+
+            delta = defaultdict(float)
+
+            while stack:
+                w = stack.pop()
+
+                for v in P[w]:
+                    if sigma[w] != 0:
+                        coeff = (sigma[v] / sigma[w]) * (1 + delta[w])
+                        delta[v] += coeff
+
+                if w != s:
+                    cb[w] += delta[w]
+
+        heap = []
+        return_list = []
+
+        for key, value in cb.items():
+            heapq.heappush(heap, (-value, key))
+        
+        for _ in range(K):
+            t = heapq.heappop(heap)
+            return_list.append((-t[0] / ((self.order - 1) * (self.order - 2)), t[1]))
+
+        return return_list
+    
+    def __str__(self):
+        text = ""
+        for key, value in self.nodes.items():
+            text += f"{key}: {value[1:]}\n"
+        
+        return text
