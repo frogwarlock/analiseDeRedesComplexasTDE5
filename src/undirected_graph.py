@@ -308,3 +308,28 @@ class UndirectedGraph:
             text += f"{key}: {value}\n"
         
         return text
+
+    def mst_from_node(self, start):
+        if start not in self.nodes:
+            return None, 0
+
+        visited = set()
+        mst_edges = []
+        total_cost = 0
+
+        heap = []
+        visited.add(start)
+        for neighbor, weight in self.nodes[start][1:]:
+            heapq.heappush(heap, (weight, start, neighbor))
+
+        while heap: # Usando Prim
+            weight, u, v = heapq.heappop(heap)
+            if v not in visited:
+                visited.add(v)
+                mst_edges.append((u, v, weight))
+                total_cost += weight
+                for neighbor, w in self.nodes[v][1:]:
+                    if neighbor not in visited:
+                        heapq.heappush(heap, (w, v, neighbor))
+
+        return mst_edges, total_cost

@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from directed_graph import DirectedGraph
 from undirected_graph import UndirectedGraph
+import os
 
 def normalize_name(name):
     return name.strip().upper()
@@ -64,6 +65,22 @@ for node, value in sorted(udg_centrality.items(), key=lambda x: x[1], reverse=Tr
     save_centrality_to_file(udg_centrality, "./resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
 print()
 
+def save_mst_to_file(mst_edges, total_cost, filename):
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(f"Custo total da MST: {total_cost}\n")
+        file.write("Arestas:\n")
+        for u, v, w in mst_edges:
+            file.write(f"{u} - {v} (peso {w})\n")
+
+ator = "BOB ODENKIRK"
+mst_edges, mst_cost = udg.mst_from_node(ator)
+
+if mst_edges:
+    save_mst_to_file(mst_edges, mst_cost, "./resultados/mst_bob_odenkirk.txt")
+else:
+    print(f"O vértice {ator} não existe no grafo.")
+    
+
 plt.hist(dg.degree_distribution(), color="skyblue", edgecolor="black")
 plt.title("Grafo Direcionado")
 plt.xlabel("Graus")
@@ -76,7 +93,6 @@ plt.xlabel("Graus")
 plt.ylabel("Frequência")
 plt.show()
 
-"""
 print("Centralidade de intermediação de Bob Odenkirk (direcionado): {:.8f}".format(dg.betweenness("BOB ODENKIRK")))
 
 dg_betweenness_file = open("./resultados/dg_betweenness.txt", "w", encoding="utf-8")
@@ -95,4 +111,3 @@ for actor, bc in udg.estimate_top_k_betweenness(10, epsilon=0.15):
     udg_betweenness_file.write("{}: {:.8f}\n".format(actor, bc))
 
 udg_betweenness_file.close()
-"""
