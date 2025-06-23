@@ -154,20 +154,20 @@ dg_betweenness_file.close()
 udg_betweenness_file = open("./resultados/udg_betweenness.txt", "w", encoding="utf-8")
 udg_betweenness_file.write("10 atores/atrizes mais influentes perante a métrica de centralidade de intermediação\n\n")
 
-for actor, bc in udg.estimate_top_k_betweenness(10, epsilon=0.15):
+for actor, bc in udg.estimate_top_k_betweenness(10, epsilon=0.9):
     udg_betweenness_file.write("{}: {:.8f}\n".format(actor, bc))
 
 udg_betweenness_file.close()
 sccs = dg.kosaraju_scc()
 
-with open("../resultados/componentes_fortemente_conexas.txt", "w", encoding="utf-8") as f:
+with open("./resultados/componentes_fortemente_conexas.txt", "w", encoding="utf-8") as f:
     f.write(f"Quantidade de componentes fortemente conexas: {len(sccs)}\n\n")
     for i, comp in enumerate(sccs, 1):
         f.write(f"Componente {i}: tamanho = {len(comp)}\n")
 
 components = udg.count_connected_components()
 
-with open("../resultados/componentes_conexas.txt", "w", encoding="utf-8") as f:
+with open("./resultados/componentes_conexas.txt", "w", encoding="utf-8") as f:
     f.write(f"Quantidade de componentes conexas: {len(components)}\n\n")
     for i, comp in enumerate(components, 1):
         f.write(f"Componente {i}: tamanho = {len(comp)}\n")

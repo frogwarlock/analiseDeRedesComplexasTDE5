@@ -254,3 +254,127 @@ class UndirectedGraph:
                         heapq.heappush(heap, (w, v, neighbor))
 
         return mst_edges, total_cost
+
+    def dijkstra(self, start):
+        distances = defaultdict(lambda: float('inf'))
+        distances[start] = 0
+
+        heap = [(0, start)]
+
+        while heap:
+            current_distance, current_node = heapq.heappop(heap)
+
+            if current_distance <= distances[current_node]:
+                for neighbor, weight in self.nodes[current_node][1:]:
+                    distance = current_distance + weight
+
+                    if distance < distances[neighbor]:
+                        distances[neighbor] = distance
+                        heapq.heappush(heap, (distance, neighbor))
+
+        return distances
+    
+    def diameter_approx(self):
+        result = 0
+
+        while result <= 2:
+            v = random.choice(list(self.nodes.keys()))
+            distances = list(self.dijkstra(v).values())
+            d1 = max(distances)
+            distances.remove(d1)
+            d2 = max(distances)
+            result = d1 + d2
+
+        return result
+
+    def dijkstra_brandes(self, source):
+        dist = defaultdict(lambda: float('inf'))
+        dist[source] = 0
+
+        sigma = defaultdict(int)
+        sigma[source] = 1
+
+        pred = defaultdict(list)
+        
+        heap = [(0, source)]
+
+        while heap:
+            d, u = heapq.heappop(heap)
+
+            if d <= dist[u]:
+                for v, weight in self.nodes[u][1:]:
+                    alt = dist[u] + weight
+
+                    if alt < dist[v]:
+                        dist[v] = alt
+                        sigma[v] = sigma[u]
+                        pred[v] = [u]
+                        heapq.heappush(heap, (alt, v))
+                    elif alt == dist[v]:
+                        sigma[v] += sigma[u]
+                        pred[v].append(u)
+
+        return dist, sigma, pred
+    
+    def sample_shortest_path(self, pred, sigma, u, v, b, R):
+        t = v
+
+        while t != u:
+            predecessors = pred[t]
+            sigmas = [sigma[p] for p in predecessors]
+            total = sum(sigmas)
+            r = random.uniform(0, total)
+            acc = 0
+
+            for i in range(len(predecessors)):
+                acc += sigmas[i]
+                if r <= acc:
+                    t = predecessors[i]
+                    if t != u:
+                        b[t] += 1 / R
+                    break
+        
+        return b
+    
+    def estimate_all_betweenness(self, R):
+        V = list(self.nodes.keys())
+        b = defaultdict(float)
+
+        for _ in range(R):
+            u, v = random.sample(V, 2)
+            _, sigma, pred = self.dijkstra_brandes(u)
+
+            if sigma[v] != 0:
+                b = self.sample_shortest_path(pred, sigma, u, v, b, R)
+
+        return b
+    
+    def estimate_top_k_betweenness(self, K, epsilon=0.1, delta=0.1, c=0.5, c_prime=0.5):
+        VD = self.diameter_approx()
+
+        delta1 = 1 - math.sqrt(1 - delta)
+        r1 = int((c / epsilon**2) * (math.floor(math.log2(VD - 2)) + 1 + math.log(1 / delta1)))
+        b1 = self.estimate_all_betweenness(r1)
+        top_k_values = sorted(b1.values(), reverse=True)[:K]
+        l1 = max(top_k_values[-1] - epsilon, epsilon / 2)
+
+        r2 = int((c_prime / (epsilon**2 * l1)) * ((math.floor(math.log2(VD - 2)) + 1) * math.log(1 / l1) + math.log(1 / delta1)))
+        b2 = self.estimate_all_betweenness(r2)
+
+        if "ANUPAM KHER" in b2:
+            print("Centralidade de intermediação de Anupam Kher (não-direcionado): {:.8f}".format(b2["ANUPAM KHER"]))
+
+        top_k_values2 = sorted(b2.values(), reverse=True)[:K]
+        l2 = top_k_values2[-1] / (1 + epsilon)
+
+        top_k_set = {v: b for v, b in b2.items() if b / (1 - epsilon) >= l2}
+        
+        top_k_set = [(key, value) for key, value in top_k_set.items()]
+        return sorted(top_k_set, key=lambda x: x[1], reverse=True)[:K]
+
+    def __str__(self):
+        text = ""
+        for key, value in self.nodes.items():
+            text += f"{key}: {value}\n"
+        
+        return text
