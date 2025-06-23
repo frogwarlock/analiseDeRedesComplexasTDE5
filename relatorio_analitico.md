@@ -67,8 +67,21 @@ Na tabela se mostram os atores que tem maior grau e a imagem é uma representaç
 Quais são os 10 diretores mais influentes perante a métrica de centralidade de intermediação? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-[Inserir texto explicativo]  
-[Inserir tabela e gráfico]
+
+Neste caso, os diretores mais influentes perante a métrica de centralidade de intermediação são os que mais atuaram também como atores, ou que atuaram como atores em filmes com um grande elenco, pois como os diretores são os pontos finais de todos os caminhos do grafo direcionado, as pessoas que atuam apenas como diretores não intermediam nenhum caminho, e quando atuam como intermediário, é porque atuam também como atores. Essa justificativa é perceptível no fato de o maior grau ser atribuído a James Franco, que além de diretor, também é ator, por exemplo, como Harry Osborn em Homem-Aranha (2002)
+ 
+| Rank| Diretor             | $C_{\text{Grau}}^{\text{In}}$ |
+| ---- | ------------------- | ----------------------------- |
+| 1    | JAMES FRANCO     | 0.00000077                        |
+| 2    | JON FAVREAU    | 0.00000063                        |
+| 3    | FRANK OZ         | 0.00000047                        |
+| 4    | MAHESH MANJREKAR    | 0.00000040                        |
+| 5    | ELIZABETH BANKS    | 0.00000039                        |
+| 6    | JIM HENSON         | 0.00000037                        |
+| 7    | SETH ROGEN    | 0.00000036                        |
+| 8    | BRIAN HENSON | 0.00000035                        |
+| 9    | RAJAT KAPOOR           | 0.00000031                        |
+| 10   | GAUTHAM VASUDEV MENON         | 0.00000031                        |
 
 ---
 
@@ -124,7 +137,7 @@ Na tabela se mostram os atores que tem maior grau.
 Quais são os 10 atores/atrizes mais influentes perante a métrica de centralidade de intermediação? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-[Inserir texto explicativo]  
+Nesse caso, pode-se presumir que quanto maior o grau de intermediação, maior a participação desse ator em filmes de diferentes nichos, pois atuam como intermediários entre vários clusters de diferentes nichos de filmes, maximizando a quantidade de caminhos possíveis em que são intermediários.
 [Inserir tabela e gráfico]
 
 ---
