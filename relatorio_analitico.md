@@ -138,7 +138,19 @@ Quais são os 10 atores/atrizes mais influentes perante a métrica de centralida
 
 **Resposta:**  
 Nesse caso, pode-se presumir que quanto maior o grau de intermediação, maior a participação desse ator em filmes de diferentes nichos, pois atuam como intermediários entre vários clusters de diferentes nichos de filmes, maximizando a quantidade de caminhos possíveis em que são intermediários.
-[Inserir tabela e gráfico]
+
+| Rank| Ator             | $C_{\text{Grau}}^{\text{In}}$ |
+| ---- | ------------------- | ----------------------------- |
+| 1    | ANUPAM KHER     | 0.05014588                        |
+| 2    | BEN KINGSLEY    | 0.02042305                        |
+| 3    | OM PURI         | 0.01714077                        |
+| 4    | IKO UWAIS    | 0.01039387                        |
+| 5    | PRIYANKA CHOPRA    | 0.01021152                        |
+| 6    | MADHAVAN         | 0.01021152                        |
+| 7    | DANNY GLOVER    | 0.00984683                        |
+| 8    | ALFRED MOLINA | 0.00984683                        |
+| 9    | STEVE BLUM           | 0.00948213                        |
+| 10   | ERNEST BORGNINE         | 0.00911743                        |
 
 ---
 
