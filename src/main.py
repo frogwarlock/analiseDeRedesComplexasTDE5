@@ -1,4 +1,6 @@
 import csv
+import pandas as pd
+import matplotlib.pyplot as plt
 from directed_graph import DirectedGraph
 from undirected_graph import UndirectedGraph
 
@@ -62,4 +64,35 @@ for node, value in sorted(udg_centrality.items(), key=lambda x: x[1], reverse=Tr
     save_centrality_to_file(udg_centrality, "./resultados/diretores_atores_centralidade_grafo_nao_direcionado.txt")
 print()
 
-print("Betweenness de Quentin Tarantino: {:.7f}".format(dg.betweenness("QUENTIN TARANTINO")))
+plt.hist(dg.degree_distribution(), color="skyblue", edgecolor="black")
+plt.title("Grafo Direcionado")
+plt.xlabel("Graus")
+plt.ylabel("Frequência")
+plt.show()
+
+plt.hist(udg.degree_distribution(), color="skyblue", edgecolor="black")
+plt.title("Grafo Não-Direcionado")
+plt.xlabel("Graus")
+plt.ylabel("Frequência")
+plt.show()
+
+"""
+print("Centralidade de intermediação de Bob Odenkirk (direcionado): {:.8f}".format(dg.betweenness("BOB ODENKIRK")))
+
+dg_betweenness_file = open("./resultados/dg_betweenness.txt", "w", encoding="utf-8")
+dg_betweenness_file.write("10 diretores mais influentes perante a métrica de centralidade de intermediação\n\n")
+
+for bc, actor in dg.top_K_betweenness(10):
+    dg_betweenness_file.write("{}: {:.8f}\n".format(actor, bc))
+
+dg_betweenness_file.close()
+
+
+udg_betweenness_file = open("./resultados/udg_betweenness.txt", "w", encoding="utf-8")
+udg_betweenness_file.write("10 atores/atrizes mais influentes perante a métrica de centralidade de intermediação\n\n")
+
+for actor, bc in udg.estimate_top_k_betweenness(10, epsilon=0.15):
+    udg_betweenness_file.write("{}: {:.8f}\n".format(actor, bc))
+
+udg_betweenness_file.close()
+"""
