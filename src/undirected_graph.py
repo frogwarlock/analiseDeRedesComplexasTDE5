@@ -1,4 +1,6 @@
 import heapq
+import random
+import math
 from collections import defaultdict
 import matplotlib.pyplot as plt
 
@@ -25,8 +27,8 @@ class UndirectedGraph:
         if i1 == -1:
             self.nodes[node1].append((node2, weight))
             self.nodes[node2].append((node1, weight))
-            self.nodes[node1][0] = (self.nodes[node1][0][0], self.nodes[node1][0][1] + 1)
-            self.nodes[node2][0] = (self.nodes[node2][0][0], self.nodes[node2][0][1] + 1)
+            self.nodes[node1][0] = (self.nodes[node1][0][0] + 1, self.nodes[node1][0][1] + 1)
+            self.nodes[node2][0] = (self.nodes[node2][0][0] + 1, self.nodes[node2][0][1] + 1)
             self.size += 1
         else:
             new_weight = self.nodes[node1][i1][1] + 1
@@ -98,6 +100,10 @@ class UndirectedGraph:
         plt.grid(True)
         plt.show()
 
+
+    def degree_distribution(self):
+        return [self.nodes[v][0][0] for v in self.nodes]
+
     def betweenness(self, u):
         cb = 0
         for s in self.nodes:
@@ -118,14 +124,15 @@ class UndirectedGraph:
                             new_weight = d[v] + weight
                             if d[w] > new_weight:
                                 d[w] = new_weight
-                                heapq.heappush(heap, (new_weight, w))
                                 sigma[w] = sigma[v]
                                 P[w] = [v]
+                                heapq.heappush(heap, (new_weight, w))
                             elif d[w] == new_weight:
                                 sigma[w] += sigma[v]
                                 P[w].append(v)
 
                 delta = defaultdict(float)
+
                 while stack:
                     w = stack.pop()
                     for v in P[w]:
