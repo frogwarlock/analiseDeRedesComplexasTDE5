@@ -8,9 +8,13 @@
 **Pergunta:**  
 Qual é a distribuição de graus de ambos os grafos? Essa distribuição apresenta características típicas de redes complexas?
 
-**Resposta:**  
-[Inserir texto explicativo]  
-[Inserir histogramas e gráficos de distribuição]
+**Resposta:** 
+
+Por meio dos gráficos abaixo gerados com base nos grafos utilizados, é perceptível uma distribuição de graus seguindo uma lei de potência, portanto, pode-se concluir que ambos os grafos representam uma rede complexa
+
+![Figure_1](https://github.com/user-attachments/assets/95ed746b-5ace-407e-97bd-abe2e314ce88)
+![Figure_2](https://github.com/user-attachments/assets/00a51dd5-74e5-4f45-a55d-d52aff7766af)
+
 
 ---
 
