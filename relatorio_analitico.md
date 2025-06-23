@@ -94,9 +94,22 @@ Neste caso, os diretores mais influentes perante a métrica de centralidade de i
 **Pergunta:**  
 Quais são os 10 diretores mais influentes perante a métrica de centralidade de proximidade? O que essa métrica representa nesse contexto?
 
-**Resposta:**  
-[Inserir texto explicativo]  
-[Inserir tabela e gráfico]
+**Resposta:**
+
+Nesse caso mede o quão próximo cada ator está de todos os outros no grafo direcionado de colaborações, baseado no menor elencos em comum necessários para ir de um ator a outro.
+
+| Rank | Ator                | C_Proximidade |
+|------|---------------------|---------------|
+| 1    | JAMES FRANCO        | 0.0011        |
+| 2    | SELENA GOMEZ        | 0.0010        |
+| 3    | SETH ROGEN          | 0.0009        |
+| 4    | VINCENT D'ONOFRIO   | 0.0009        |
+| 5    | SHARON STONE        | 0.0009        |
+| 6    | JACKI WEAVER        | 0.0009        |
+| 7    | JOSH HUTCHERSON     | 0.0008        |
+| 8    | ZAC EFRON           | 0.0008        |
+| 9    | HANNIBAL BURESS     | 0.0008        |
+| 10   | NAT WOLFF           | 0.0008        |
 
 ---
 
