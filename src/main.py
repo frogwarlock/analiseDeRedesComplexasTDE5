@@ -41,8 +41,55 @@ def save_centrality_to_file(centrality, filename):
         for node, value in sorted(centrality.items(), key=lambda x: x[1], reverse=True):
             #esse for percorre o dicionário e com base no valor de centralidade,
             #os nós são ordenados em descrescente
+
             file.write(f"\n{node} - {value:.4f}")
 
+
+def save_topk(topk_list, filename):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write("Node - Closeness\n")
+        for node, score in topk_list:
+            file.write(f"{node} - {score:.7f}\n")
+
+    dataset = load_data('../dados/netflix_amazon_disney_titles.csv')
+
+    dg = DirectedGraph()
+    udg = UndirectedGraph()
+
+    
+    for directors, actors in dataset:
+        for director in directors:
+            for actor in actors:
+                dg.add_edge(actor, director)
+        for i in range(len(actors)):
+            for j in range(i + 1, len(actors)):
+                udg.add_edge(actors[i], actors[j])
+
+qt_score  = dg.closeness("MORGAN FREEMAN")
+bob_score = udg.closeness("LEONARDO DICAPRIO")
+
+print("Closeness:")
+print(f"MORGAN FREEMAN(Directed): {qt_score:.7f}")
+print(f"LEONARDO DICAPRIO(Undirected): {bob_score:.7f}\n")
+os.makedirs("../resultados", exist_ok=True)
+with open("../resultados/closeness.txt", "w", encoding='utf-8') as file:
+    file.write(f"Closeness de MORGAN FREEMAN (Directed): {qt_score:.7f}\n")
+    file.write(f"Closeness de LEONARDO DICAPRIO(Undirected): {bob_score:.7f}\n")
+
+top10_directed = dg.topk_closeness(10)
+print("Top 10 closeness no grafo direcionado:")
+for node, score in top10_directed:
+    print(f"{node} - {score:.7f}")
+save_topk(top10_directed, '../resultados/top10_closeness_directed.txt')
+print("Saved top 10 to ../resultados/top10_closeness_directed.txt")
+
+top10 = udg.topk_closeness(10)
+print("Top 10 atores/atrizes por centralidade de proximidade:")
+for node, score in top10:
+    print(f"{node} - {score:.7f}")
+save_topk(top10, '../resultados/top10_closeness_undirected.txt')
+print("Saved top 10 to ../resultados/top10_closeness_undirected.txt")
 
 udg_centrality = udg.degree_centrality()
 dg_centrality = dg.degree_centrality(1) # 1 para indegree, 2 para outdegree, 0 para total degree
@@ -50,8 +97,8 @@ dg_centrality = dg.degree_centrality(1) # 1 para indegree, 2 para outdegree, 0 p
 print("Directed Graph:")
 print("Order:", dg.order)
 print("Size:", dg.size)
-print("Top 10 diretores mais influentes(direcionado):") #diretores é indg devido as especificações do TDE
-for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]: # o que muda é o [:10] que limita a 10 os resultados
+print("Top 10 diretores mais influentes(direcionado):") 
+for node, value in sorted(dg_centrality.items(), key=lambda x: x[1], reverse=True)[:10]:
     print(f"{node} - {value:.4f}")
     save_centrality_to_file(dg_centrality, "./resultados/diretores_centralidade_grafo_direcionado.txt")
 

@@ -47,6 +47,79 @@ class DirectedGraph:
     def degree(self, node):
         return self.indegree(node) + self.outdegree(node)
 
+    
+    def _dijkstra(self, source, early_stop_sum=None):
+            infinito = float('inf')
+            dist = {v: infinito for v in self.nodes}
+            dist[source] = 0
+            heap = [(0, source)]
+            settled_sum = 0.0
+
+            while heap:
+                d_u, u = heapq.heappop(heap)
+                if d_u > dist[u]:
+                    continue
+                settled_sum += d_u
+                if early_stop_sum is not None and settled_sum > early_stop_sum:
+                    return None
+                for nbr, w in self.nodes[u][1:]:
+                    nd = d_u + w
+                    if nd < dist[nbr]:
+                        dist[nbr] = nd
+                        heapq.heappush(heap, (nd, nbr))
+            return dist
+
+    def topk_closeness(self, k):
+        heap = []
+        worst = 0.0
+
+        for node in self.nodes:
+            early_stop = None
+
+            if len(heap) == k and worst > 0:
+                early_stop = (self.order - 1) ** 2 / ((self.order - 1) * worst)
+
+            dist = self._dijkstra(node, early_stop)
+
+            if dist is None:
+                continue
+
+            reachable = [d for v, d in dist.items() if v != node and d < float('inf')]
+            R = len(reachable)
+            centrality = 0.0
+
+            if R > 0:
+                total = sum(reachable)
+                if total > 0:
+                    centrality = (R / (self.order - 1)) * (R / total)
+
+            if len(heap) < k:
+                heapq.heappush(heap, (centrality, node))
+            elif centrality > heap[0][0]:
+                heapq.heapreplace(heap, (centrality, node))
+
+            if len(heap) == k:
+                worst = heap[0][0]
+
+        return sorted([(n, c) for c, n in heap], key=lambda x: x[1], reverse=True)
+
+    def closeness(self, u):
+        if u not in self.nodes:
+            raise KeyError(f"Vértice {u} não existe")
+
+        dist = self._dijkstra(u)
+
+        reachable = [d for v, d in dist.items() if v != u and d < float('inf')]
+        R = len(reachable)
+        if R == 0:
+            return 0.0
+
+        total_dist = sum(reachable)
+        if total_dist == 0:
+            return 0.0
+
+        return (R / (self.order - 1)) * (R / total_dist)
+
     def degree_centrality(self, type=0):
         scale = 1 / (self.order - 1)
 

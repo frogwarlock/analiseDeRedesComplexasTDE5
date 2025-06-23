@@ -1,0 +1,2 @@
+Closeness de MORGAN FREEMAN (Directed): 0.0003581
+Closeness de LEONARDO DICAPRIO(Undirected): 0.2088370

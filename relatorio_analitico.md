@@ -217,7 +217,6 @@ Nesse caso, pode-se presumir que quanto maior o grau de intermediação, maior a
 Quais são os 10 atores/atrizes mais influentes perante a métrica de centralidade de proximidade? O que essa métrica representa nesse contexto?
 
 **Resposta:**  
-
 Nesse caso mede o quão próximo cada ator está de todos os outros no grafo de colaborações, medindo o número mínimo de elencos em comum necessários para conectar-lo a qualquer colega. 
 
 | Rank | Ator           | C_Proximidade |
