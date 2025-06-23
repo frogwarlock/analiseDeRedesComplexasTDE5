@@ -46,31 +46,60 @@ class DirectedGraph:
     def degree(self, node):
         return self.indegree(node) + self.outdegree(node)
     
-    def _dijkstra(self, source):
-        infinito = float('inf')
-        dist = {}
-        for vertice in self.nodes:
-            dist[vertice] = infinito
+    def _dijkstra(self, source, early_stop_sum=None):
+            infinito = float('inf')
+            dist = {v: infinito for v in self.nodes}
+            dist[source] = 0
+            heap = [(0, source)]
+            settled_sum = 0.0
 
-        dist[source] = 0
+            while heap:
+                d_u, u = heapq.heappop(heap)
+                if d_u > dist[u]:
+                    continue
+                settled_sum += d_u
+                if early_stop_sum is not None and settled_sum > early_stop_sum:
+                    return None
+                for nbr, w in self.nodes[u][1:]:
+                    nd = d_u + w
+                    if nd < dist[nbr]:
+                        dist[nbr] = nd
+                        heapq.heappush(heap, (nd, nbr))
+            return dist
 
+    def topk_closeness(self, k):
         heap = []
-        heapq.heappush(heap, (0, source))
+        worst = 0.0
 
-        while len(heap) > 0:
-            distancia_atual, vertice_atual = heapq.heappop(heap)
+        for node in self.nodes:
+            early_stop = None
 
-            if distancia_atual > dist[vertice_atual]:
+            if len(heap) == k and worst > 0:
+                early_stop = (self.order - 1) ** 2 / ((self.order - 1) * worst)
+
+            dist = self._dijkstra(node, early_stop)
+
+            if dist is None:
                 continue
 
-            for (vizinho, peso_aresta) in self.nodes[vertice_atual][1:]:
-                nova_distancia = distancia_atual + peso_aresta
+            reachable = [d for v, d in dist.items() if v != node and d < float('inf')]
+            R = len(reachable)
+            centrality = 0.0
 
-                if nova_distancia < dist[vizinho]:
-                    dist[vizinho] = nova_distancia
-                    heapq.heappush(heap, (nova_distancia, vizinho))
+            if R > 0:
+                total = sum(reachable)
+                if total > 0:
+                    centrality = (R / (self.order - 1)) * (R / total)
 
-        return dist
+            if len(heap) < k:
+                heapq.heappush(heap, (centrality, node))
+            elif centrality > heap[0][0]:
+                heapq.heapreplace(heap, (centrality, node))
+
+            if len(heap) == k:
+                worst = heap[0][0]
+
+        return sorted([(n, c) for c, n in heap], key=lambda x: x[1], reverse=True)
 
     def closeness(self, u):
         if u not in self.nodes:

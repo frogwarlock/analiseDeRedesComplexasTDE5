@@ -97,15 +97,6 @@ class UndirectedGraph:
         return sorted([(n, c) for c, n in heap], key=lambda x: x[1], reverse=True)
 
 
-    def count_connected_components(self):
-        visited = set()
-        count = 0
-        for v in self.nodes:
-            if v not in visited:
-                self._dfs(v, visited)
-                count += 1
-        return count
-
     def closeness(self, u):
 
         if u not in self.nodes:
@@ -134,6 +125,15 @@ class UndirectedGraph:
         centralidade = fator1 * fator2
 
         return centralidade
+
+    def count_connected_components(self):
+        visited = set()
+        count = 0
+        for v in self.nodes:
+            if v not in visited:
+                self._dfs(v, visited)
+                count += 1
+        return count
 
     def count_connected_components(self):
         

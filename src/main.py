@@ -31,6 +31,7 @@ for directors, actors in dataset:
     for i in range(len(actors)):
         for j in range(i + 1, len(actors)):
             udg.add_edge(actors[i], actors[j])
+            
 def save_centrality_to_file(centrality, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write("Node - Centrality")
@@ -39,12 +40,6 @@ def save_centrality_to_file(centrality, filename):
             #esse for percorre o dicionário e com base no valor de centralidade,
             #os nós são ordenados em descrescente
 
-            file.write(f"\n{node} - {value:.4f}")
-
-def save_centrality_to_file(centrality, filename):
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write("Node - Centrality")
-        for node, value in sorted(centrality.items(), key=lambda x: x[1], reverse=True):
             file.write(f"\n{node} - {value:.4f}")
 
 def save_topk(topk_list, filename):
@@ -59,6 +54,7 @@ def save_topk(topk_list, filename):
     dg = DirectedGraph()
     udg = UndirectedGraph()
 
+    
     for directors, actors in dataset:
         for director in directors:
             for actor in actors:
@@ -70,13 +66,6 @@ def save_topk(topk_list, filename):
 qt_score  = dg.closeness("MORGAN FREEMAN")
 bob_score = udg.closeness("LEONARDO DICAPRIO")
 
-top10 = udg.topk_closeness(10)
-print("Top 10 atores/atrizes por centralidade de proximidade:")
-for node, score in top10:
-    print(f"{node} - {score:.7f}")
-save_topk(top10, '../resultados/top10_closeness_undirected.txt')
-print("Saved top 10 to ../resultados/top10_closeness_undirected.txt")
-
 print("Closeness:")
 print(f"MORGAN FREEMAN(Directed): {qt_score:.7f}")
 print(f"LEONARDO DICAPRIO(Undirected): {bob_score:.7f}\n")
@@ -84,6 +73,21 @@ os.makedirs("../resultados", exist_ok=True)
 with open("../resultados/closeness.txt", "w", encoding='utf-8') as file:
     file.write(f"Closeness de MORGAN FREEMAN (Directed): {qt_score:.7f}\n")
     file.write(f"Closeness de LEONARDO DICAPRIO(Undirected): {bob_score:.7f}\n")
+
+top10_directed = dg.topk_closeness(10)
+print("Top 10 closeness no grafo direcionado:")
+for node, score in top10_directed:
+    print(f"{node} - {score:.7f}")
+save_topk(top10_directed, '../resultados/top10_closeness_directed.txt')
+print("Saved top 10 to ../resultados/top10_closeness_directed.txt")
+
+top10 = udg.topk_closeness(10)
+print("Top 10 atores/atrizes por centralidade de proximidade:")
+for node, score in top10:
+    print(f"{node} - {score:.7f}")
+save_topk(top10, '../resultados/top10_closeness_undirected.txt')
+print("Saved top 10 to ../resultados/top10_closeness_undirected.txt")
+
 udg_centrality = udg.degree_centrality()
 dg_centrality = dg.degree_centrality(1) # 1 para indegree, 2 para outdegree, 0 para total degree
 
